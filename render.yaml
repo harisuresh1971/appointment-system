@@ -1,16 +1,9 @@
+# Free deployment: Web Service only (no paid database here).
+# Add DATABASE_URL and SECRET_KEY in Render dashboard using a free Postgres (e.g. Neon).
 services:
   - type: web
     name: appointment-system
     runtime: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: appointment-db
-          property: connectionString
-      - key: SECRET_KEY
-        generateValue: true
-databases:
-  - name: appointment-db
-    plan: free

@@ -18,38 +18,36 @@
 
 ---
 
-## Deploy on Render (recommended) — get your live link
+## Deploy FREE on Render (no credit card)
 
-This app is a **FastAPI + PostgreSQL** backend with server-rendered pages. **Render** is the right place to deploy it. (Vercel and Vite are for frontend/static or serverless; this app needs a long-running server and a database.)
+Use a **free Render Web Service** plus a **free PostgreSQL** from Neon. Everything stays free.
 
-### Option A: One-click with Blueprint (creates app + database)
+### Step 1: Get a free PostgreSQL database
 
-1. Push this project to **GitHub** (create a repo and push your code).
-2. Go to [https://dashboard.render.com](https://dashboard.render.com) and sign in (or sign up with GitHub).
-3. Click **New** → **Blueprint**.
-4. Connect your GitHub account if needed, then select the repo that has this project.
-5. Render will read `render.yaml` and create:
-   - A **PostgreSQL** database (free tier).
-   - A **Web Service** that uses it.
-6. Click **Apply** and wait for the first deploy to finish.
-7. Your live link will be: **`https://<your-service-name>.onrender.com`**  
-   (e.g. `https://appointment-system.onrender.com` if you keep the name from `render.yaml`).
+1. Go to **[Neon.tech](https://neon.tech)** and sign up (free, no card).
+2. Create a new project. Copy the **connection string** (looks like `postgresql://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require`). This is your `DATABASE_URL`.
 
-### Option B: Manual Web Service (you already have a database)
+### Step 2: Deploy the app on Render
 
-1. Push this project to **GitHub**.
-2. On Render: **New** → **Web Service**.
-3. Connect the repo and select it.
+1. Go to **[dashboard.render.com](https://dashboard.render.com)** and sign in with GitHub.
+2. Click **New** → **Web Service**.
+3. Connect the repo **harisuresh1971/appointment-system** (or your fork).
 4. Use:
    - **Build command:** `pip install -r requirements.txt`
    - **Start command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
-5. Under **Environment**, add:
-   - `DATABASE_URL` — your PostgreSQL connection string (from Render PostgreSQL or elsewhere).
-   - `SECRET_KEY` — a long random string (e.g. from `openssl rand -hex 32`).
-6. Click **Create Web Service**. When the deploy succeeds, your link is **`https://<service-name>.onrender.com`**.
+5. Select **Free** plan (not paid).
+6. Under **Environment**, add:
+   - **Key:** `DATABASE_URL` → **Value:** paste the Neon connection string from Step 1.
+   - **Key:** `SECRET_KEY` → **Value:** any long random string (e.g. `my-secret-key-12345-change-in-production`).
+7. Click **Create Web Service**. Wait for the deploy to finish.
 
-### After deploy
+Your app will be at **https://appointment-system.onrender.com** (or the name you chose). Open it, register, and log in.
 
-- Open the link → you should see a redirect to `/login`.
-- Register a user, log in, and use Dashboard, Customers, and Appointments.
-- Free-tier services spin down after inactivity; the first open may take 30–60 seconds.
+### Free tier notes
+
+- Render free services **spin down** after ~15 minutes of no traffic; first open may take 30–60 seconds.
+- Neon free tier is enough for this app; no card required.
+
+### Alternative free Postgres
+
+You can use **[ElephantSQL](https://www.elephantsql.com)** or **[Supabase](https://supabase.com)** free tier instead of Neon. Create a database, copy the PostgreSQL URL, and use it as `DATABASE_URL` in Render.

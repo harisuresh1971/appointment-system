@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-gray-800 mb-6">Dashboard</h1>
+
+<div class="grid gap-6 md:grid-cols-2">
+  <div class="card">
+    <h2 class="text-lg font-medium text-gray-800 mb-4">Today's Appointments</h2>
+    {% if today_appointments %}
+    <ul class="space-y-3">
+      {% for a in today_appointments %}
+      <li class="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+        <div>
+          <span class="font-medium">{{ a.customer.name }}</span>
+          <span class="text-gray-500 text-sm ml-2">{{ a.time.strftime('%H:%M') }}</span>
+        </div>
+        <span class="text-sm {{ 'text-green-600' if a.status == 'Completed' else 'text-amber-600' }}">{{ a.status }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-gray-500 text-sm">No appointments today.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2 class="text-lg font-medium text-gray-800 mb-4">Upcoming Appointments</h2>
+    {% if upcoming_appointments %}
+    <ul class="space-y-3">
+      {% for a in upcoming_appointments %}
+      <li class="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+        <div>
+          <span class="font-medium">{{ a.customer.name }}</span>
+          <span class="text-gray-500 text-sm ml-2">{{ a.date }} {{ a.time.strftime('%H:%M') }}</span>
+        </div>
+        <a href="/appointments/{{ a.id }}/edit" class="text-indigo-600 text-sm hover:underline">Edit</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-gray-500 text-sm">No upcoming appointments.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="mt-6">
+  <a href="/appointments/new" class="btn-primary">New Appointment</a>
+</div>
+{% endblock %}

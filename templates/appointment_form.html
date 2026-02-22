@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit Appointment" if appointment else "New Appointment" }}{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-gray-800 mb-6">{{ "Edit Appointment" if appointment else "New Appointment" }}</h1>
+<div class="card">
+  {% if request.query_params.get("error") == "missing" %}
+  <p class="text-red-600 text-sm mb-4">Please fill in customer, date, and time.</p>
+  {% endif %}
+  {% if appointment %}
+  <form method="post" action="/appointments/{{ appointment.id }}/edit" class="space-y-4">
+  {% else %}
+  <form method="post" action="/appointments/new" class="space-y-4">
+  {% endif %}
+    <div>
+      <label for="customer_id" class="block text-sm font-medium text-gray-700 mb-1">Customer</label>
+      <select id="customer_id" name="customer_id" required class="input-field">
+        <option value="">Select customer</option>
+        {% for c in customers %}
+        <option value="{{ c.id }}" {{ 'selected' if appointment and appointment.customer_id == c.id else '' }}>{{ c.name }} ({{ c.phone }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+      <input id="date" name="date" type="date" required class="input-field" value="{{ appointment.date.isoformat() if appointment else '' }}" />
+    </div>
+    <div>
+      <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+      <input id="time" name="time" type="time" required class="input-field" value="{{ appointment.time.strftime('%H:%M') if appointment else '' }}" />
+    </div>
+    <div>
+      <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+      <textarea id="notes" name="notes" class="input-field" rows="2">{{ appointment.notes if appointment else '' }}</textarea>
+    </div>
+    <div>
+      <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+      <select id="status" name="status" class="input-field">
+        <option value="Scheduled" {{ 'selected' if appointment and appointment.status == 'Scheduled' else '' }}>Scheduled</option>
+        <option value="Completed" {{ 'selected' if appointment and appointment.status == 'Completed' else '' }}>Completed</option>
+      </select>
+    </div>
+    <button type="submit" class="btn-primary">Save</button>
+    <a href="/appointments" class="ml-4 text-gray-600 hover:text-indigo-600">Cancel</a>
+  </form>
+</div>
+{% endblock %}

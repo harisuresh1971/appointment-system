@@ -1,7 +1,14 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
-import app.core.database
+# Load config and DB early; print clear error so Render logs show it
+try:
+    import app.core.database  # noqa: F401
+except Exception as e:
+    import sys
+    print("STARTUP ERROR (check Render Environment):", str(e), file=sys.stderr)
+    raise
+
 from app.api import auth, dashboard, customers, appointments
 
 app = FastAPI(title="Appointment System")

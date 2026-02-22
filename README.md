@@ -36,9 +36,11 @@ Use a **free Render Web Service** plus a **free PostgreSQL** from Neon. Everythi
    - **Build command:** `pip install -r requirements.txt`
    - **Start command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
 5. Select **Free** plan (not paid).
-6. Under **Environment**, add:
-   - **Key:** `DATABASE_URL` → **Value:** paste the Neon connection string from Step 1.
-   - **Key:** `SECRET_KEY` → **Value:** any long random string (e.g. `my-secret-key-12345-change-in-production`).
+6. **Important — add Environment variables before first deploy:**
+   - Click **Environment** (or **Advanced** → **Add Environment Variable**).
+   - Add **Key:** `DATABASE_URL` → **Value:** paste the full Neon connection string from Step 1 (e.g. `postgresql://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require`).
+   - Add **Key:** `SECRET_KEY` → **Value:** any long random string (e.g. `my-secret-key-12345-change-in-production`).
+   - Save. Without these two, the deploy will fail.
 7. Click **Create Web Service**. Wait for the deploy to finish.
 
 Your app will be at **https://appointment-system.onrender.com** (or the name you chose). Open it, register, and log in.

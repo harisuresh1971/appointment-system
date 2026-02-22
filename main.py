@@ -12,7 +12,6 @@ except Exception as e:
 from app.api import auth, dashboard, customers, appointments
 
 app = FastAPI(title="Appointment System")
-templates = Jinja2Templates(directory="templates")
 
 app.include_router(auth.router)
 app.include_router(dashboard.router)
